@@ -80,7 +80,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
       if (!(ext == 'jpg' || ext == 'jpeg' || ext == 'png')) {
         setState(() {
-          _imageError = "⚠️ صيغة صورة غير مدعومة (JPG, JPEG, PNG فقط)";
+          _imageError = "صيغة الصورة غير مدعومة، JPG و JPEG و PNG فقط";
           _pickedFile = null;
         });
         return;
@@ -88,7 +88,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
       if (sizeMB > 5) {
         setState(() {
-          _imageError = "⚠️ حجم الصورة أكبر من 5MB";
+          _imageError = "حجم الصورة أكبر من 5 ميغابايت";
           _pickedFile = null;
         });
         return;
@@ -108,7 +108,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
     if (_imageError != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_imageError!, textAlign: TextAlign.center), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text(_imageError!, textAlign: TextAlign.center),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
@@ -133,6 +136,7 @@ class _SignupScreenState extends State<SignupScreen> {
           backgroundColor: _bg,
           elevation: 0,
           centerTitle: true,
+          automaticallyImplyLeading: false, // حذف سهم الرجوع
           title: const Text(
             'إنشاء حساب جديد',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
@@ -198,39 +202,34 @@ class _SignupScreenState extends State<SignupScreen> {
                       Text(
                         _imageError!,
                         style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                     const SizedBox(height: 24),
 
-                    // الاسم الكامل
+                    // الاسم
                     _field("الاسم", _name, (v) {
                       if (v == null || v.trim().isEmpty) return "الاسم مطلوب";
-                      if (!RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$').hasMatch(v)) {
-                        return "الاسم أحرف فقط";
-                      }
+                      if (!RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$').hasMatch(v)) return "الاسم يجب أن يحتوي على حروف فقط";
                       return null;
                     }, prefix: const Icon(Icons.badge_outlined)),
 
                     // اسم المستخدم
                     _field("اسم المستخدم", _username, (v) {
                       if (v == null || v.isEmpty) return "اسم المستخدم مطلوب";
-                      if (v.length < 3 || v.length > 15) return "الطول ٣–١٥ حرف";
-                      if (!RegExp(r'^[a-zA-Z][a-zA-Z0-9._]+$').hasMatch(v)) {
-                        return "مسموح حروف وأرقام و . و _ فقط";
-                      }
-                      if (v.contains(' ')) return "بدون مسافات";
-                      if (v.contains("..")) return "بدون .. متتالية";
+                      if (v.length < 3 || v.length > 15) return "الطول يجب أن يكون بين 3 و15 حرف";
+                      if (!RegExp(r'^[a-zA-Z][a-zA-Z0-9._]+$').hasMatch(v)) return "مسموح حروف وأرقام و . و _ فقط";
+                      if (v.contains(' ')) return "لا يسمح بالمسافات";
+                      if (v.contains("..")) return "لا يسمح بالنقطتين المتتاليتين";
                       return null;
                     }, prefix: const Icon(Icons.alternate_email)),
 
                     // البريد الإلكتروني
                     _field("البريد الإلكتروني", _email, (v) {
                       if (v == null || v.isEmpty) return "البريد الإلكتروني مطلوب";
-                      if (v.contains(' ')) return "بدون مسافات";
+                      if (v.contains(' ')) return "لا يسمح بالمسافات";
                       if (v.length > 254) return "البريد طويل جدًا";
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(v)) {
-                        return "صيغة البريد غير صحيحة";
-                      }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(v)) return "صيغة البريد غير صحيحة";
                       return null;
                     },
                         keyboard: TextInputType.emailAddress,
@@ -239,14 +238,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     // كلمة المرور
                     _field("كلمة المرور", _password, (v) {
                       if (v == null || v.isEmpty) return "كلمة المرور مطلوبة";
-                      if (v.length < 8) return "٨ أحرف على الأقل";
-                      if (!RegExp(r'[A-Z]').hasMatch(v)) return "حرف كبير/صغير + رقم + رمز";
-                      if (!RegExp(r'[a-z]').hasMatch(v)) return "حرف كبير/صغير + رقم + رمز";
-                      if (!RegExp(r'[0-9]').hasMatch(v)) return "حرف كبير/صغير + رقم + رمز";
-                      if (!RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(v)) {
-                        return "حرف كبير/صغير + رقم + رمز";
-                      }
-                      if (v.contains(' ')) return "بدون مسافات في كلمة المرور";
+                      if (v.length < 8) return "كلمة المرور يجب أن تكون 8 أحرف على الأقل";
+                      if (!RegExp(r'[A-Z]').hasMatch(v)) return "يجب أن تحتوي على حرف كبير";
+                      if (!RegExp(r'[a-z]').hasMatch(v)) return "يجب أن تحتوي على حرف صغير";
+                      if (!RegExp(r'[0-9]').hasMatch(v)) return "يجب أن تحتوي على رقم";
+                      if (!RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(v)) return "يجب أن تحتوي على رمز";
+                      if (v.contains(' ')) return "لا يسمح بالمسافات";
                       return null;
                     },
                         obscure: _ob1,
@@ -258,6 +255,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                     // تأكيد كلمة المرور
                     _field("تأكيد كلمة المرور", _confirm, (v) {
+                      if (v == null || v.isEmpty) return "تأكيد كلمة المرور مطلوب";
                       if (v != _password.text) return "كلمتا المرور غير متطابقتان";
                       return null;
                     },
@@ -347,8 +345,10 @@ class _SignupScreenState extends State<SignupScreen> {
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: Colors.grey.shade300),
           ),
+          errorStyle: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
 }
+

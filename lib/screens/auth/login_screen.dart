@@ -51,11 +51,12 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (ctx) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
-              Icon(Icons.lock_reset, size: 48, color: Color(0xFF2E774F)),
+              Icon(Icons.lock_reset, size: 48, color: _green),
               SizedBox(height: 12),
               Text(
                 "إعادة تعيين كلمة المرور",
@@ -69,63 +70,61 @@ class _LoginScreenState extends State<LoginScreen> {
             child: TextFormField(
               controller: _resetEmail,
               decoration: InputDecoration(
-                labelText: 'أدخل بريدك الإلكتروني',
+                labelText: 'البريد الإلكتروني',
                 prefixIcon: const Icon(Icons.email_outlined),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
+                filled: true,
+                fillColor: const Color(0xFFF8F9FA),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
               ),
               textAlign: TextAlign.right,
               validator: (v) {
                 final value = v?.trim() ?? '';
                 if (value.isEmpty) return 'البريد الإلكتروني مطلوب';
-                if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value)) {
-                  return 'صيغة البريد الإلكتروني غير صحيحة';
-                }
-                if (value.length > 254) return 'البريد طويل جدًا';
+                if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value)) return 'صيغة البريد غير صحيحة';
                 return null;
               },
             ),
           ),
           actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: [
-            // زر إلغاء على اليمين
+            // زر إلغاء رمادي
             TextButton(
               onPressed: () => Navigator.pop(ctx),
               child: const Text(
                 "إلغاء",
-                style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
+                style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
               ),
             ),
-            // زر إرسال على اليسار
+            // زر إرسال أخضر
             FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: _green,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
               onPressed: () {
                 if (_formKeyDialog.currentState!.validate()) {
                   Navigator.pop(ctx);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text(
-                        "✅ تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني",
+                        "تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       backgroundColor: _green,
                       behavior: SnackBarBehavior.floating,
                       margin: const EdgeInsets.all(12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       duration: const Duration(seconds: 3),
                     ),
                   );
                 }
               },
-              child: const Text("إرسال"),
+              style: FilledButton.styleFrom(
+                backgroundColor: _green,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: const Text(
+                "إرسال",
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
@@ -238,7 +237,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                         ),
-
                         const SizedBox(height: 12),
 
                         // رابط استرجاع كلمة المرور
@@ -255,7 +253,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 16),
 
                         // زر تسجيل الدخول
@@ -289,7 +286,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 20),
 
                   // رابط إنشاء حساب جديد

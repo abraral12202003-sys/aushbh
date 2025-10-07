@@ -3,6 +3,7 @@ import 'package:aushbh/screens/main/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:aushbh/screens/settings/settings_screen.dart';
 
+/// شاشة الرئيسية (HomeScreen)
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   static const routeName = '/home';
@@ -11,12 +12,14 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+/// حالة الشاشة الرئيسية
 class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = false;
 
   String? _userName = "مستخدم";
   String? _userProfileImage;
 
+  /// بناء واجهة الشاشة
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -30,14 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // بناء محتوى الشاشة الرئيسية
+  /// بناء محتوى الشاشة الرئيسية
   Widget _buildHomeContent(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            // قسم الترحيب بالمستخدم
+            /// قسم الترحيب بالمستخدم
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -61,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "مرحباً 👋",
+                        "أهلاً بك في عالم الأعشاب 🌿",
                         style: TextStyle(fontSize: 16, color: Colors.black54),
                       ),
                       Text(
@@ -79,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 30),
 
-            // زر التصوير الرئيسي
+            /// زر التصوير الرئيسي
             GestureDetector(
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -116,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Text(
-                        "لتحديد نوعها واستخداماتها",
+                        "لتحديد اسمها واستخداماتها",
                         style: TextStyle(fontSize: 14, color: Colors.white70),
                       ),
                     ],
@@ -127,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 40),
 
-            // عنوان الوظائف الرئيسية
+            /// عنوان الوظائف الرئيسية
             const Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -137,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 20),
 
-            // شبكة الوظائف
+            /// شبكة الوظائف الرئيسية
             GridView.count(
               crossAxisCount: 2,
               crossAxisSpacing: 18,
@@ -180,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // بناء بطاقة الوظائف الرئيسية
+  /// بناء بطاقة خاصة بالوظائف الرئيسية
   Widget _buildFeatureCard({
     required String title,
     required String subtitle,
