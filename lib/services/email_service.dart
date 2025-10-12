@@ -1,11 +1,10 @@
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmailService {
   static const String supportEmail = 'support@herbscanner.app';
   static const String appName = 'تطبيق عُشبة';
 
-  // فتح تطبيق البريد
   static Future<void> openEmailClient({
     required BuildContext context,
     String subject = 'طلب دعم فني لتطبيق عُشبة',
@@ -16,7 +15,8 @@ class EmailService {
       final Uri emailUri = Uri(
         scheme: 'mailto',
         path: toEmail ?? supportEmail,
-        query: 'subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}',
+        query:
+            'subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}',
       );
 
       final ok = await launchUrl(emailUri, mode: LaunchMode.externalApplication);
@@ -26,15 +26,8 @@ class EmailService {
     }
   }
 
-  // التحقق من وجود تطبيق بريد
-  static Future<bool> validateEmailClient() async {
-    final Uri emailUri = Uri(scheme: 'mailto', path: supportEmail);
-    return await canLaunchUrl(emailUri);
-  }
-
-  // معالجة حالة عدم وجود تطبيق بريد
   static void handleNoEmailClient(BuildContext context) {
-    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text(
@@ -49,7 +42,7 @@ class EmailService {
           right: 20,
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 3),
       ),
     );
   }
